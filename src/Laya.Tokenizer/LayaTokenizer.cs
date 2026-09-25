@@ -49,7 +49,7 @@ public sealed partial class LayaTokenizer
 
             var vocab = model.GetProperty("vocab");
             _vocab = new Dictionary<string, int>(vocab.EnumerateObject().Count(), StringComparer.Ordinal);
-            _rev = new Dictionary<int, string>();
+            _rev = [];
             foreach (var prop in vocab.EnumerateObject())
             {
                 var id = prop.Value.GetInt32();
@@ -113,7 +113,7 @@ public sealed partial class LayaTokenizer
             ApplyMerges(word, wordIds);
             ids.AddRange(wordIds);
         }
-        return ids.ToArray();
+        return [.. ids];
     }
 
     private void ApplyMerges(List<string> word, List<int> wordIds)
@@ -155,7 +155,7 @@ public sealed partial class LayaTokenizer
                 if (_symbolToByte.TryGetValue(ch, out var b)) bytes.Add(b);
             }
         }
-        return Encoding.UTF8.GetString(bytes.ToArray());
+        return Encoding.UTF8.GetString([.. bytes]);
     }
 
     /// <summary>Tablas byte-&gt;símbolo y símbolo-&gt;byte (bytes_to_unicode de GPT-2).</summary>

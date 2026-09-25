@@ -45,7 +45,7 @@ public sealed record LayaToolError(string Error);
 /// El modelo ONNX se carga perezosamente en la primera llamada.
 /// </summary>
 [McpServerToolType]
-public sealed class LayaTools
+public sealed class LayaTools(LayaRuntime runtime)
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -54,12 +54,7 @@ public sealed class LayaTools
     };
     private static readonly LayaJsonContext Json = new(JsonOptions);
 
-    private readonly LayaRuntime _runtime;
-
-    public LayaTools(LayaRuntime runtime)
-    {
-        _runtime = runtime;
-    }
+    private readonly LayaRuntime _runtime = runtime;
 
     [McpServerTool]
     [Description(

@@ -59,7 +59,7 @@ public sealed class LayaConfig
         {
             var prefix = type + ":";
             if (!k.StartsWith(prefix, StringComparison.Ordinal)) continue;
-            var range = k.Substring(prefix.Length);
+            var range = k[prefix.Length..];
             if (RangeContains(range, nOptions)) return (tv, k);
         }
         return (1.0, key);
