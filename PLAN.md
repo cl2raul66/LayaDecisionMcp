@@ -193,3 +193,23 @@ Desviaciones respecto al plan original: las tools finales son `decision`/`temper
   no por velocidad. **Decisión: fp32 como modelo de servicio**; int8 queda como fallback documentado.
 - Caveat del entorno: con poca RAM libre el SO mata la carga de 1.6 GB (muerte silenciosa, stdout
   cerrado); espaciar cargas consecutivas. La instancia del servicio OpenCode mantiene ti3x residente.
+
+### Piezas extra F3/F4 (2026-09-25, verificadas)
+
+- **Skill `laya-tools`** refinada: latencia real (~1 s/decisión, ~30 s la 1ª tras arrancar el proceso),
+  advertencia de `confidence` no calibrada como umbral de bloqueo, patrón de pre-filtrado >3 opciones.
+- **Comando `/laya-triage`** (`~/.config/opencode/commands/laya-triage.md`, agente `gh-automation`):
+  clasifica issues (choice sobre 3 labels pre-filtradas + score de urgencia) con gating antes de escribir.
+- **Plugin `laya-gate`** (`~/.config/opencode/plugins/laya-gate/`, hook `permission.evaluate` — API oficial
+  verificada sobre `@opencode/plugin@2.0.16`: `ctx.permission.hook`, `Permission.Effect = allow|deny|ask`):
+  clasifica comandos shell con Laya (`noul` "destructive?"), cachea por hash, **fail-closed** (error/timeout
+  → `ask` intacto), nunca `deny` automático, modo **shadow** por defecto (anota `[Laya] P(destructive)=…`
+  en el mensaje del permiso; `autoApprove` desactivado). Cliente JSON-RPC newline en `laya-client.mjs`
+  verificado con Node (handshake 45 s, warm ~0,4 s/decisión).
+- **Medición de calibración para la tarea "comando destructivo"** (fuera de los 4 flujos del checkpoint):
+  seguros (`git status`, `dotnet build`, `Get-Content`, `Get-ChildItem -Recurse`) → P(destructive)
+  **0,34–0,42**; destructivos (`Remove-Item -Recurse -Force`, `git push --force`, `Format-Volume`,
+  `Stop-Process -Force`) → **0,51–0,58**. Hueco limpio pero escala aplastada (temp `noul:2`=1,98) y
+  `act_probability`=1.0 en todos (la cabeza act no discrimina esta tarea). Umbral `safeThreshold=0,45`
+  empírico sobre esa muestra; **fase shadow obligatoria** para validar con datos reales antes de
+  `autoApprove`.
