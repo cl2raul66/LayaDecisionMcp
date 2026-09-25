@@ -1,0 +1,13 @@
+# Artefactos del modelo (GB, reproducibles con tools/fetch-artifacts.ps1).
+# Se conservan fixtures de test y laya_config.json (KB).
+artifacts/**/*.onnx
+artifacts/**/*.onnx_data
+artifacts/**/tokenizer.json
+artifacts/**/tokenizer_config.json
+
+# Build .NET
+[Bb]in/
+[Oo]bj/
+publish/
+[Test]est[Rr]esult*/
+.vs/

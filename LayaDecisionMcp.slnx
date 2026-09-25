@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Laya.Inference/Laya.Inference.csproj" />
+    <Project Path="src/Laya.Mcp/Laya.Mcp.csproj" />
+    <Project Path="src/Laya.Tokenizer/Laya.Tokenizer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Laya.Tests/Laya.Tests.csproj" />
+  </Folder>
+</Solution>

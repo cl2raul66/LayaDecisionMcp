@@ -1,0 +1,96 @@
+{
+  "answers": {
+    "churn_risk": {
+      "noul": 0.274,
+      "rl_agent": {
+        "act_probability": 1.0
+      },
+      "type": "noul"
+    },
+    "department": {
+      "choice": "billing",
+      "confidence": 0.399,
+      "probabilities": {
+        "billing": 0.7876,
+        "sales": 0.0854,
+        "support": 0.127
+      },
+      "rl_agent": {
+        "act_probability": 1.0
+      },
+      "type": "choice"
+    },
+    "urgency": {
+      "confidence": 0.1634,
+      "legend": {
+        "0": "low",
+        "1": "medium",
+        "2": "high"
+      },
+      "probabilities": {
+        "0": 0.0963,
+        "1": 0.3478,
+        "2": 0.5559
+      },
+      "rl_agent": {
+        "act_probability": 1.0
+      },
+      "score": 1.4596,
+      "type": "score"
+    }
+  },
+  "arrays": "reference.npz",
+  "format_version": 1,
+  "questions": {
+    "churn_risk": {
+      "criteria": null,
+      "instructions": "Is this customer at risk of leaving?",
+      "type": "noul"
+    },
+    "department": {
+      "criteria": {
+        "billing": "Payments and refunds",
+        "sales": "New purchases",
+        "support": "Product help"
+      },
+      "instructions": "Route this ticket to one department.",
+      "type": "choice"
+    },
+    "urgency": {
+      "criteria": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "instructions": "Score urgency from low to high.",
+      "type": "score"
+    }
+  },
+  "rendered_options": {
+    "churn_risk": [
+      "false: no, the statement does not hold",
+      "true: yes, the statement holds"
+    ],
+    "department": [
+      "billing: Payments and refunds",
+      "support: Product help",
+      "sales: New purchases"
+    ],
+    "urgency": [
+      "level 0: low",
+      "level 1: medium",
+      "level 2: high"
+    ]
+  },
+  "state": {
+    "ticket": {
+      "body": "I was charged twice. Please refund one payment.",
+      "customer_language": "English",
+      "subject": "Refund request for a duplicate charge"
+    }
+  },
+  "usage": {
+    "input_tokens": 209,
+    "output_tokens": 0
+  }
+}

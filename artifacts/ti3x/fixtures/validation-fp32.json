@@ -1,0 +1,13 @@
+{
+  "act_probs_max_abs_error": 0.0,
+  "logits_max_abs_error": 2.9802322387695312e-06,
+  "passed": true,
+  "precision": "fp32",
+  "providers": [
+    "CPUExecutionProvider"
+  ],
+  "tolerance": {
+    "atol": 0.001,
+    "rtol": 0.001
+  }
+}
