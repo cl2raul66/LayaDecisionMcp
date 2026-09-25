@@ -172,7 +172,24 @@ Desviaciones respecto al plan original: las tools finales son `decision`/`temper
   verificadas de punta a punta vía OpenCode (números = golden).
 - Agentes `gh-automation` (triaje+puerta), `gh-investigate` (reporta act/confidence, provisional si
   `act<0.6` o `conf<0.5`), `ms-docs` (desambiguación) actualizados con gating.
-- **Pendiente**: skill `laya-tools`, `git init` del proyecto, y F4 (recalibración issue #186, benchmark
-  int8 vs fp32 en CPU, fine-tune multilingüe).
+- **Pendiente**: F4 (recalibración issue #186, fine-tune multilingüe).
+- Skill `laya-tools` creada (`~/.config/opencode/skills/laya-tools/SKILL.md`): formato por tipo,
+  prompts en inglés + estado compacto, gating, ejemplo golden verificado.
+- Repo con `git init` (commit `8012eb2`); `.gitignore` excluye `*.onnx*`/`tokenizer*.json`/`bin`/`obj`/`publish`
+  y conserva fixtures + `laya_config.json` (KB, reproducibilidad de tests sin descargas pesadas).
 - Caveatas vigentes: inglés-only, contexto ≤1024, máx 3 opciones, combos sin bucket → temp 1.0
   por defecto (warning en la respuesta).
+
+### Benchmark int8 vs fp32 (2026-09-25, exe AOT, 3 decisiones golden por sesión)
+
+| Modelo | Carga (1ª llamada) | Inferencia caliente | choice/score/noul |
+|---|---|---|---|
+| ti3x fp32 (external data) | 32.3 s | 0.88 / 0.92 s | billing / 1.4596 / 0.274 ✓ |
+| yehor fp32 | 27.5 s | 0.98 / 0.97 s | idénticos ✓ |
+| yehor int8 | 19.3 s | 2.84 / 2.79 s | billing / 1.4588 / 0.2739 (≈) |
+
+- **int8 es ~3× MÁS LENTO en inferencia** en esta CPU (overhead de cuantización/decuantización
+  por capa con batch=1; los kernels fp32 oneDNN/MKL ganan). Solo compensa por RAM (482 MB vs 1.6 GB),
+  no por velocidad. **Decisión: fp32 como modelo de servicio**; int8 queda como fallback documentado.
+- Caveat del entorno: con poca RAM libre el SO mata la carga de 1.6 GB (muerte silenciosa, stdout
+  cerrado); espaciar cargas consecutivas. La instancia del servicio OpenCode mantiene ti3x residente.
